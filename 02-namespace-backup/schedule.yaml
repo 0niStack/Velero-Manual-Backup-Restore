@@ -1,0 +1,16 @@
+# Velero Schedule = a cron that creates Backup objects automatically
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: demo-app-daily
+  namespace: velero
+spec:
+  schedule: "0 2 * * *"          # every day at 02:00 (UTC)
+  useOwnerReferencesInBackup: false
+  template:
+    includedNamespaces:
+      - demo-app
+    defaultVolumesToFsBackup: true   # back up PVC data via node-agent
+    snapshotVolumes: false
+    ttl: 720h0m0s                    # keep backups 30 days
+    storageLocation: default
